@@ -1,8 +1,13 @@
 import axios from "axios"
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.BASE_URL,
+    baseURL: "/api",
   })
+
+
+  
+console.log("=========>", import.meta.env.BASE_URL)
+
 
 const getAll = () => {
     const request = axiosInstance.get("/persons")

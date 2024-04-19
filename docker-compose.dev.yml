@@ -20,6 +20,8 @@ services:
       dockerfile: ./dev.Dockerfile
     volumes:
       - ./:/usr/src/app
+      - node_modules:/usr/src/app/node_modules # A bit of node magic, this ensures the dependencies built for the image are not available locally.
+      - dist:/usr/src/app/dist # A bit of node magic, this ensures the dependencies built for the image are not available locally.
     environment:
       - MONGODB_URI=${MONGODB_URI}
       - BASE_URL=/api
@@ -30,3 +32,7 @@ services:
       - 3456:27017
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
+volumes: # This is required for the node_modules named volume
+  node_modules:
+  dist:
