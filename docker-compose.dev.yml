@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: proxy
+    depends_on:
+      - phonebook-backend
+
+  phonebook-backend:
+    image: phenbook-back-dev
+    depends_on:
+      - mongo
+    build:
+      context: ./
+      dockerfile: ./dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - BASE_URL=/api
+
+  mongo:
+    image: mongo
+    ports:
+      - 3456:27017
+    volumes:
+      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
